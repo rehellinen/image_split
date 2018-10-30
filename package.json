@@ -1,0 +1,32 @@
+{
+  "name": "image_split",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon --watch src index"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rehellinen/image_split.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rehellinen/image_split/issues"
+  },
+  "homepage": "https://github.com/rehellinen/image_split#readme",
+  "devDependencies": {
+    "nodemon": "^1.18.4"
+  },
+  "dependencies": {
+    "chalk": "^2.4.1",
+    "@babel/core": "^7.1.2",
+    "@babel/plugin-proposal-decorators": "^7.1.2",
+    "@babel/preset-env": "^7.1.0",
+    "@babel/polyfill": "^7.0.0",
+    "@babel/register": "^7.0.0",
+    "@tensorflow/tfjs": "^0.13.3"
+  }
+}
