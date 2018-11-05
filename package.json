@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon --watch src index"
+    "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
+    "build": "webpack --config build/webpack.base.conf.js --mode=production"
   },
   "repository": {
     "type": "git",
@@ -18,15 +19,25 @@
   },
   "homepage": "https://github.com/rehellinen/image_split#readme",
   "devDependencies": {
-    "nodemon": "^1.18.4"
+    "@babel/core": "^7.1.2",
+    "@babel/preset-env": "^7.1.0",
+    "babel-loader": "^8.0.4",
+    "copy-webpack-plugin": "^4.6.0",
+    "css-loader": "^1.0.1",
+    "html-webpack-plugin": "^4.0.0-beta.2",
+    "node-sass": "^4.9.4",
+    "pug": "^2.0.3",
+    "pug-plain-loader": "^1.0.0",
+    "sass-loader": "^7.1.0",
+    "vue-loader": "^15.4.2",
+    "vue-style-loader": "^4.1.2",
+    "vue-template-compiler": "^2.5.17",
+    "webpack": "^4.16.1",
+    "webpack-cli": "^3.1.2",
+    "webpack-dev-server": "^3.1.10",
+    "webpack-merge": "^4.1.4"
   },
   "dependencies": {
-    "chalk": "^2.4.1",
-    "@babel/core": "^7.1.2",
-    "@babel/plugin-proposal-decorators": "^7.1.2",
-    "@babel/preset-env": "^7.1.0",
-    "@babel/polyfill": "^7.0.0",
-    "@babel/register": "^7.0.0",
-    "@tensorflow/tfjs": "^0.13.3"
+    "vue": "^2.5.17"
   }
 }
