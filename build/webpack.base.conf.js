@@ -3,12 +3,11 @@
  *  Create By rehellinen
  *  Create On 2018/11/5 11:37
  */
-const config = require('../config')
+const {resolve} = require('path')
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-// const vueLoaderConfig = require('./vue-loader.conf.js')
 
-const {r} = require('./utils')
+const r = path => resolve(__dirname, path)
 
 module.exports = {
   context: r('../'),
@@ -16,7 +15,7 @@ module.exports = {
     app: './src/index.js'
   },
   output: {
-    path: config.prod.assetsRoot,
+    path: r('../dist'),
     filename: '[name].bundle.js',
     chunkFilename: "[name].chunk.js"
   },
@@ -28,7 +27,6 @@ module.exports = {
       {
         test: /\.vue$/,
         loader: 'vue-loader',
-        // options: vueLoaderConfig
       },
       {
         test: /\.js$/,
