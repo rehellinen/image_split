@@ -1,6 +1,6 @@
 <template lang="pug">
   div
-    p 124
+    p 12422222
 </template>
 
 <script>

@@ -4,23 +4,32 @@
  *  Create On 2018/11/5 11:37
  */
 const {resolve} = require('path')
+const webpack = require('webpack')
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
 
 const r = path => resolve(__dirname, path)
 
 module.exports = {
+  mode: 'development',
   context: r('../'),
   entry: {
     app: './src/index.js'
   },
   output: {
     path: r('../dist'),
+    publicPath: '/dist/',
     filename: '[name].bundle.js',
     chunkFilename: "[name].chunk.js"
   },
   resolve: {
     extensions: ['.js', '.vue', '.json']
+  },
+  devServer: {
+    // ...
+    quiet: true,
+    // ...
   },
   module: {
     rules: [
@@ -55,7 +64,7 @@ module.exports = {
   plugins: [
     new VueLoaderPlugin(),
     new HtmlWebpackPlugin({
-      template: 'index.html'
+      template: './src/index.html'
     })
   ]
 }
