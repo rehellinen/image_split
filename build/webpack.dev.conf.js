@@ -5,8 +5,10 @@
  */
 const merge = require('webpack-merge')
 const webpack = require('webpack')
-const webpackDevServer = require('webpack-dev-server');
+const config = require('./config')
 const {resolve} = require('path')
+const webpackDevServer = require('webpack-dev-server');
+const friendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
 const baseWebpackConfig = require('./webpack.base.conf')
 
 const r = path => resolve(__dirname, path)
@@ -16,15 +18,23 @@ module.exports = merge(baseWebpackConfig, {
   output: {
     publicPath: '/'
   },
+  devtool: config.dev.devtool,
   devServer: {
     hot: true,
-    host: 'localhost',
-    port: '5000',
-    quiet: true
+    host: config.dev.host,
+    port: config.dev.port,
+    compress: true,
+    quiet: true,
+    open: config.dev.autoOpenBrowser
   },
   plugins: [
     new webpack.NamedModulesPlugin(),
     new webpack.HotModuleReplacementPlugin(),
-    new webpack.NoEmitOnErrorsPlugin()
+    new webpack.NoEmitOnErrorsPlugin(),
+    new friendlyErrorsPlugin({
+      compilationSuccessInfo: {
+        messages: [`running at { http://${config.dev.host}:${config.dev.port} }`]
+      }
+    })
   ]
 })
