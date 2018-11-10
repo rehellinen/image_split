@@ -4,9 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
-    "build": "webpack --config build/webpack.base.conf.js --mode=production"
+    "dev": "webpack-dev-server --config build/webpack.dev.conf.js",
+    "build": "rimraf dist && cross-env NODE_ENV=production webpack --config build/webpack.base.conf.js --progress --hide-modules"
   },
   "repository": {
     "type": "git",
@@ -22,31 +21,22 @@
     "@babel/core": "^7.1.2",
     "@babel/preset-env": "^7.1.0",
     "babel-loader": "^8.0.4",
-    "chalk": "^2.4.1",
-    "chokidar": "^2.0.4",
-    "copy-webpack-plugin": "^4.6.0",
     "css-loader": "^1.0.1",
-    "friendly-errors-webpack-plugin": "^1.7.0",
     "html-webpack-plugin": "^4.0.0-beta.2",
-    "koa-static": "^5.0.0",
-    "koa-webpack": "^5.1.1",
-    "memory-fs": "^0.4.1",
     "node-sass": "^4.9.4",
     "pug": "^2.0.3",
     "pug-plain-loader": "^1.0.0",
+    "rimraf": "^2.6.2",
     "sass-loader": "^7.1.0",
     "vue-loader": "^15.4.2",
     "vue-style-loader": "^4.1.2",
     "vue-template-compiler": "^2.5.17",
-    "webpack": "^4.16.1",
+    "webpack": "^4.25.1",
     "webpack-cli": "^3.1.2",
-    "webpack-dev-middleware": "^3.4.0",
     "webpack-dev-server": "^3.1.10",
-    "webpack-hot-middleware": "^2.24.3",
     "webpack-merge": "^4.1.4"
   },
   "dependencies": {
-    "koa": "^2.6.1",
     "vue": "^2.5.17"
   }
 }
