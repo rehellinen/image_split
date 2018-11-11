@@ -8,7 +8,7 @@ module.exports = {
     // dev-server
     host: '127.0.0.1',
     port: 9527,
-    autoOpenBrowser: true,
+    autoOpenBrowser: false,
     // es-lint
     useEslint: true,
     // source map

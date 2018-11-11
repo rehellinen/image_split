@@ -45,6 +45,13 @@ module.exports = {
             options: {indentedSyntax: true}
           }
         ]
+      },
+      {
+        test: /\.css$/,
+        use: [
+          'vue-style-loader',
+          'css-loader'
+        ]
       }
     ]
   },
