@@ -9,11 +9,11 @@ const config = require('./config')
 const {resolve} = require('path')
 const webpackDevServer = require('webpack-dev-server');
 const friendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
-const baseWebpackConfig = require('./webpack.base.conf')
+const baseConfig = require('./webpack.base.conf')
 
 const r = path => resolve(__dirname, path)
 
-module.exports = merge(baseWebpackConfig, {
+module.exports = merge(baseConfig, {
   mode: 'development',
   output: {
     publicPath: '/'

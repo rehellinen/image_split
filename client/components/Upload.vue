@@ -6,16 +6,22 @@
 </template>
 
 <script>
+import {ProcessData} from "../utils/ProcessData"
+import {MnistData} from "../utils/data"
+
 export default {
+  async created () {
+    let data = new MnistData()
+    await data.load()
+  },
   methods: {
     uploadImage (event) {
       this.file = event.target.files[0]
-      let that = this
 
       const reader = new FileReader()
       reader.readAsArrayBuffer(this.file)
       reader.onload = function (e) {
-        that.image = this.result
+        (new ProcessData(this.result)).process()
       }
     }
   }
