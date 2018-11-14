@@ -16,7 +16,9 @@ class Server {
   }
 
   start () {
+    // 加入路由中间件
     this.useRouters()
+    // 启动服务器
     this.app.listen(this.port, this.host)
     console.log(chalk.blue(`Server listens on ${this.host}:${this.port}`))
   }

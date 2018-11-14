@@ -13,8 +13,6 @@ export class ProcessImage {
   async getRGB () {
     const lenna = await Jimp.read(this.image)
 
-    console.log(lenna)
-
     let red = []
     let green = []
     let blue = []
@@ -36,6 +34,8 @@ export class ProcessImage {
       count ++
     })
 
-    console.log(green[4].length)
+    return [
+      red, green, blue
+    ]
   }
 }
