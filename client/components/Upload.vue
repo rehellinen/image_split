@@ -18,17 +18,12 @@ export default {
       let formData = new FormData()
       formData.append('image', file, 'test.jpg')
       formData.append('action', 'jpg')
-      try{
-        const res = await axios({
-          url: requestUrl,
-          method: 'post',
-          data: formData,
-          headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-        })
-        console.log(res)
-      } catch (e) {
-        console.log(e)
-      }
+      const res = await axios({
+        url: requestUrl,
+        method: 'post',
+        data: formData,
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+      })
     }
   }
 }
