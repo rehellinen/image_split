@@ -6,22 +6,28 @@
 </template>
 
 <script>
-import {ProcessData} from "../utils/ProcessData"
-import {MnistData} from "../utils/data"
+import axios from 'axios'
+
+const requestUrl = 'http://127.0.0.1:9528/image'
 
 export default {
-  async created () {
-    let data = new MnistData()
-    await data.load()
-  },
   methods: {
-    uploadImage (event) {
-      this.file = event.target.files[0]
+    async uploadImage (event) {
+      const file = event.target.files[0]
 
-      const reader = new FileReader()
-      reader.readAsArrayBuffer(this.file)
-      reader.onload = function (e) {
-        (new ProcessData(this.result)).process()
+      let formData = new FormData()
+      formData.append('image', file, 'test.jpg')
+      formData.append('action', 'jpg')
+      try{
+        const res = await axios({
+          url: requestUrl,
+          method: 'post',
+          data: formData,
+          headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+        })
+        console.log(res)
+      } catch (e) {
+        console.log(e)
       }
     }
   }

@@ -12,7 +12,7 @@ const r = path => resolve(__dirname, path)
 
 module.exports = {
   context: r('../'),
-  entry: { app: './src/index.js' },
+  entry: { app: './client/index.js' },
   output: {
     path: r('../dist'),
     filename: '[name].bundle.js',
@@ -59,7 +59,7 @@ module.exports = {
   plugins: [
     new VueLoaderPlugin(),
     new HtmlWebpackPlugin({
-      template: './src/index.html'
+      template: './client/index.html'
     })
   ]
 }

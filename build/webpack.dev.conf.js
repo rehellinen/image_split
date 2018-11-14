@@ -34,6 +34,9 @@ module.exports = merge(baseConfig, {
     new friendlyErrorsPlugin({
       compilationSuccessInfo: {
         messages: [`running at { http://${config.dev.host}:${config.dev.port} }`]
+      },
+      onErrors (severity, errors) {
+        console.log(errors)
       }
     })
   ]
