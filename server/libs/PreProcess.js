@@ -4,6 +4,7 @@
  *  Create On 2018/11/13 11:04
  */
 import Jimp from 'jimp'
+import {Superpixel} from "./Superpixel"
 import R from 'ramda'
 
 /**
@@ -15,14 +16,16 @@ export class PreProcess {
   }
 
   async get () {
+    const time1 = new Date().getTime()
     // 初始化一些属性
     await this.init()
     // 获取图片每个像素的RGB
-    const rgb = await this.getRGB()
+    const rgb = this.getRGB()
     // RGB转LAB
     const lab = this.toLAB(rgb)
+    const time2 = new Date().getTime()
     // 调用superpixel进行分割
-    // console.log(lab)
+    const res = new Superpixel(lab, this.width, this.height).split()
   }
 
   toLAB (rgb) {
@@ -31,14 +34,6 @@ export class PreProcess {
     const Xn = 0.95047
     const Yn = 1.0
     const Zn = 1.08883
-
-    const f = value => {
-      if (value > Math.pow(6/29, 3)) {
-        return Math.pow(value, 1/3)
-      } else {
-        return 1/3 * Math.pow(29/6, 2) * value + 4/29
-      }
-    }
 
     for (let i = 0; i < this.height; i++) {
       for (let j = 0; j < this.width; j++) {
@@ -61,7 +56,7 @@ export class PreProcess {
     this.height = image.bitmap.height
   }
 
-  async getRGB () {
+  getRGB () {
     let red = []
     let green = []
     let blue = []
