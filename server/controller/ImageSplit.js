@@ -5,7 +5,7 @@
  */
 import Multer from 'koa-multer'
 import {resolve} from 'path'
-import {ProcessImage} from "../utils/ProcessImage"
+import {PreProcess} from "../libs/PreProcess"
 
 const data = new Date()
 const storage = Multer.diskStorage({
@@ -19,9 +19,9 @@ const storage = Multer.diskStorage({
 export const upload = Multer({storage})
 
 export const ImageSplit = () => async (ctx, next) => {
-  // 获取图片的RGB数组
   const path = ctx.req.file.path
-  const color = await new ProcessImage(path).getRGB()
+  // 预处理
+  const image = await new PreProcess(path).get()
 
   // 返回信息
   ctx.body = 'success'

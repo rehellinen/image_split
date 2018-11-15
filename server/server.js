@@ -31,6 +31,14 @@ class Server {
     this.app.use(router.routes())
       .use(router.allowedMethods())
   }
+
+  testSplit () {
+    const path = require('path')
+    let ctx = {req: {file: {path: ''}}}
+    ctx.req.file.path = path.resolve(__dirname, './upload/20181114/1542164942001.jpg')
+    ImageSplit()(ctx)
+  }
 }
 
-(new Server()).start()
+// (new Server()).start()
+(new Server()).testSplit()
