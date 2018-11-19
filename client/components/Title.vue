@@ -15,6 +15,7 @@ export default {
     align-items: center
     background-color: #3F51B5
     height: 50px
+    width: 100%
     p
       color: white
       font-size: 15px
