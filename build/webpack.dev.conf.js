@@ -25,7 +25,13 @@ module.exports = merge(baseConfig, {
     port: config.dev.port,
     compress: true,
     quiet: true,
-    open: config.dev.autoOpenBrowser
+    open: config.dev.autoOpenBrowser,
+    proxy: {
+      '/api': {
+        target: 'http://localhost:9528',
+        pathRewrite: {"^/api" : ""}
+      }
+    }
   },
   plugins: [
     new webpack.NamedModulesPlugin(),

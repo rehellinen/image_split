@@ -10,7 +10,7 @@
 <script>
 import axios from 'axios'
 
-const requestUrl = 'http://127.0.0.1:9528/image'
+const requestUrl = '/api/image'
 
 export default {
   data () {

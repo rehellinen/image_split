@@ -13,17 +13,60 @@ export class Superpixel {
   split () {
     // 生成初始种子
     const seeds = this._generateSeeds()
+    // 初始化信息
+    this._generateInfo()
     // 迭代合并
-    const splitRes = []
-    let count = 0
+    seeds.forEach((item, index) => {
+      for (let i = 1; i <= this.side * 2; i++) {
+        for (let j = 1; j <= this.side * 2; j++) {
+          const center = this.lab[item.x + item.y * this.width]
 
-    // while (count < this.width * this.height) {
-      seeds.forEach(item => {
-        const middle = Math.floor(item[0] + item[1] * this.width)
-        this.compare(this.lab[middle], this.lab[middle + 1])
-      })
-    //   count++
-    // }
+          if (item.x + i < this.width && item.y + j < this.height) {
+            const pixel = this.lab[item.x+i + (item.y+j) * this.width]
+            const similarity = this.compare(center, pixel)
+            this.changeInfo(item.x + i, item.y + j, similarity, index)
+          }
+
+          if (item.x + i < this.width && item.y - j > 0) {
+            const pixel = this.lab[item.x+i + (item.y-j) * this.width]
+            const similarity = this.compare(center, pixel)
+            this.changeInfo(item.x + i, item.y-j, similarity, index)
+          }
+
+          if (item.x - i > 0 && item.y - j > 0) {
+            const pixel = this.lab[item.x-i + (item.y-j) * this.width]
+            const similarity = this.compare(center, pixel)
+            this.changeInfo(item.x-i, item.y-j, similarity, index)
+          }
+
+          if (item.x - i > 0 && item.y + j < this.height) {
+            const pixel = this.lab[item.x-i + (item.y+j) * this.width]
+            const similarity = this.compare(center, pixel)
+            this.changeInfo(item.x-i, item.y+j, similarity, index)
+          }
+        }
+      }
+    })
+
+    return this.info
+  }
+
+  changeInfo (x, y, similarity, category) {
+    let pixelInfo = this.info[`${x}-${y}`]
+    if (similarity < pixelInfo.distance) {
+      pixelInfo.distance = similarity
+      pixelInfo.category = category
+    }
+  }
+
+  _generateInfo () {
+    let info = {}
+    for (let i = 0; i < this.width; i++) {
+      for (let j = 0; j < this.height; j++) {
+        info[`${i}-${j}`] = {distance: 99999, category: -1}
+      }
+    }
+    this.info = info
   }
 
   // 判断两个像素的相似度
@@ -45,18 +88,16 @@ export class Superpixel {
       Math.pow(space / S * m, 2)
       , 1 / 2)
   }
-  // 生成超像素的初始种子
-  _generateSeeds () {
-    let pixels = []
-    const widthCount = 8
-    const heightCount = 6
-    const perWidth = this.width / widthCount
-    const perHeight = this.height / heightCount
-    this.totalCount = widthCount * heightCount
 
-    for (let i = 0; i < widthCount; i++) {
-      for (let j = 0; j < heightCount; j++) {
-        pixels.push([perWidth * (i + 1/2), perHeight * (j + 1/2)])
+  // 生成超像素的初始种子
+  _generateSeeds (totalCount = 50) {
+    const pixels = []
+    this.totalCount = totalCount
+    this.side = Math.pow((this.width * this.height) / totalCount, 1/2)
+
+    for (let i = this.side; i < this.width; i += this.side) {
+      for (let j = this.side; j < this.height; j += this.side) {
+        pixels.push({x: Math.floor(i), y: Math.floor(j)})
       }
     }
 

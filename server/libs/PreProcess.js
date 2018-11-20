@@ -23,9 +23,11 @@ export class PreProcess {
     const rgb = this.getRGB()
     // RGB转LAB
     const lab = this.toLAB(rgb)
-    const time2 = new Date().getTime()
     // 调用superpixel进行分割
     const res = new Superpixel(lab, this.width, this.height).split()
+    const time2 = new Date().getTime()
+    console.log(time2 - time1)
+    return res
   }
 
   toLAB (rgb) {

@@ -22,7 +22,10 @@ export const ImageSplit = () => async (ctx, next) => {
   const path = ctx.req.file.path
   // 预处理
   const image = await new PreProcess(path).get()
-
   // 返回信息
-  ctx.body = 'success'
+  ctx.type = 'application/json'
+  ctx.body = {
+    message: 'success',
+    data: JSON.stringify(image)
+  }
 }
