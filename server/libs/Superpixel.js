@@ -12,61 +12,52 @@ export class Superpixel {
 
   split () {
     // 生成初始种子
-    const seeds = this._generateSeeds()
+    const seeds = this.generateSeeds()
     // 初始化信息
-    this._generateInfo()
+    this.generateInfo()
     // 迭代合并
     seeds.forEach((item, index) => {
-      for (let i = 1; i <= this.side * 2; i++) {
-        for (let j = 1; j <= this.side * 2; j++) {
-          const center = this.lab[item.x + item.y * this.width]
+      const range = this.getRange(item)
+      const pixels = this.generateAround(range)
+      const center = this.lab[item.x + item.y * this.width]
 
-          if (item.x + i < this.width && item.y + j < this.height) {
-            const pixel = this.lab[item.x+i + (item.y+j) * this.width]
-            const similarity = this.compare(center, pixel)
-            this.changeInfo(item.x + i, item.y + j, similarity, index)
-          }
-
-          if (item.x + i < this.width && item.y - j > 0) {
-            const pixel = this.lab[item.x+i + (item.y-j) * this.width]
-            const similarity = this.compare(center, pixel)
-            this.changeInfo(item.x + i, item.y-j, similarity, index)
-          }
-
-          if (item.x - i > 0 && item.y - j > 0) {
-            const pixel = this.lab[item.x-i + (item.y-j) * this.width]
-            const similarity = this.compare(center, pixel)
-            this.changeInfo(item.x-i, item.y-j, similarity, index)
-          }
-
-          if (item.x - i > 0 && item.y + j < this.height) {
-            const pixel = this.lab[item.x-i + (item.y+j) * this.width]
-            const similarity = this.compare(center, pixel)
-            this.changeInfo(item.x-i, item.y+j, similarity, index)
-          }
-        }
-      }
+      pixels.forEach(i => {
+        const similarity = this.compare(center, i)
+        this.changeInfo(i, similarity, index)
+      })
     })
-
-    return this.info
+    return this.lab
   }
 
-  changeInfo (x, y, similarity, category) {
-    let pixelInfo = this.info[`${x}-${y}`]
-    if (similarity < pixelInfo.distance) {
-      pixelInfo.distance = similarity
-      pixelInfo.category = category
+  generateAround (range) {
+    let pixels = []
+    for (let i = range.up; i <= range.down; i++) {
+      let oneLine = this.lab.slice(i*this.width + range.left, i*this.width + range.right)
+      oneLine.forEach(item => pixels.push(item))
+    }
+    return pixels
+  }
+
+  getRange (pixel) {
+    return {
+      left: (pixel.x - this.side * 2) < 0 ? 0 : Math.round(pixel.x - this.side * 2),
+      right: (pixel.x + this.side * 2) > this.width ? this.width : Math.round(pixel.x + this.side * 2),
+      up: (pixel.y - this.side * 2) < 0 ? 0 : Math.round(pixel.y - this.side * 2),
+      down: (pixel.y + this.side * 2) > this.height ? this.height : Math.round(pixel.y + this.side * 2),
     }
   }
 
-  _generateInfo () {
-    let info = {}
-    for (let i = 0; i < this.width; i++) {
-      for (let j = 0; j < this.height; j++) {
-        info[`${i}-${j}`] = {distance: 99999, category: -1}
-      }
+  changeInfo (pixel, similarity, category) {
+    if (similarity < pixel[5]) {
+      pixel[5] = similarity
+      pixel[6] = category
     }
-    this.info = info
+  }
+
+  generateInfo () {
+    this.lab.forEach(item => {
+      item.push(99999, -1)
+    })
   }
 
   // 判断两个像素的相似度
@@ -90,7 +81,7 @@ export class Superpixel {
   }
 
   // 生成超像素的初始种子
-  _generateSeeds (totalCount = 50) {
+  generateSeeds (totalCount = 36) {
     const pixels = []
     this.totalCount = totalCount
     this.side = Math.pow((this.width * this.height) / totalCount, 1/2)

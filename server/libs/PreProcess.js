@@ -5,8 +5,6 @@
  */
 import Jimp from 'jimp'
 import {Superpixel} from "./Superpixel"
-import R from 'ramda'
-
 /**
  * 预处理（使用superpixel对图像进行预分割）
  */
@@ -17,20 +15,28 @@ export class PreProcess {
 
   async get () {
     const time1 = new Date().getTime()
+
     // 初始化一些属性
     await this.init()
     // 获取图片每个像素的RGB
     const rgb = this.getRGB()
     // RGB转LAB
-    const lab = this.toLAB(rgb)
+    const lab = this.rgb2lab(rgb)
     // 调用superpixel进行分割
-    const res = new Superpixel(lab, this.width, this.height).split()
+    let res = new Superpixel(lab, this.width, this.height).split()
+    // LAB转RGB
+    res = this.lab2rgb(res)
     const time2 = new Date().getTime()
     console.log(time2 - time1)
+
     return res
   }
 
-  toLAB (rgb) {
+  lab2rgb (lab) {
+
+  }
+
+  rgb2lab (rgb) {
     let lab = []
     let index = 0
     const Xn = 0.95047
