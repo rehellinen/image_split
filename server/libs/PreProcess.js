@@ -5,6 +5,7 @@
  */
 import Jimp from 'jimp'
 import {Superpixel} from "./Superpixel"
+const {createCanvas, loadImage} = require('canvas')
 /**
  * 预处理（使用superpixel对图像进行预分割）
  */
@@ -15,68 +16,62 @@ export class PreProcess {
 
   async get () {
     const time1 = new Date().getTime()
-
-    // 初始化一些属性
-    await this.init()
     // 获取图片每个像素的RGB
-    const rgb = this.getRGB()
+    const rgb = await this.getRgb()
     // RGB转LAB
     const lab = this.rgb2lab(rgb)
     // 调用superpixel进行分割
-    let res = new Superpixel(lab, this.width, this.height).split()
+    const splitRes = new Superpixel(lab, this.width, this.height).split()
     // LAB转RGB
-    res = this.lab2rgb(res)
-    const time2 = new Date().getTime()
-    console.log(time2 - time1)
-
+    const res = this.processRes(rgb, splitRes)
     return res
   }
 
-  lab2rgb (lab) {
+  // 通过canvas获取图片的RGB
+  async getRgb () {
+    const res = await loadImage(this.path)
+    const canvas = createCanvas(res.width, res.height)
+    const ctx = canvas.getContext('2d')
+    const rgb = []
 
+    this.width = res.width
+    this.height = res.height
+
+    ctx.drawImage(res, 0, 0);
+    const data = ctx.getImageData(0, 0, res.width, res.height).data
+
+    for (let i = 0; i < data.length; i += 4) {
+      rgb.push([data[i], data[i+1], data[i+2]])
+    }
+
+    return rgb;
   }
 
+  processRes (rgb, splitRes) {
+    const res = []
+    splitRes.forEach((item, index) => {
+      rgb[index].push(item[6])
+    })
+    return rgb
+  }
+
+  // RGB转LAB
   rgb2lab (rgb) {
     let lab = []
-    let index = 0
-    const Xn = 0.95047
-    const Yn = 1.0
-    const Zn = 1.08883
+    let x = 1
+    let y = 1
 
-    for (let i = 0; i < this.height; i++) {
-      for (let j = 0; j < this.width; j++) {
-        const L = (rgb[0][index] * 13933 + rgb[1][index] * 46871 + rgb[2][index] * 4732) / Math.pow(2, 16)
-        const a = (rgb[0][index] * 14503 - rgb[1][index] * 22218 + rgb[2][index] * 7714) / Math.pow(2, 24) + 128
-        const b = (rgb[0][index] * 12773 + rgb[1][index] * 39695 - rgb[2][index] * 52468) / Math.pow(2, 24) + 128
-
-        let value = [L, a, b, j, i]
-        lab.push(value)
-        index++
+    rgb.forEach(item => {
+      const L = (item[0] * 13933 + item[1] * 46871 + item[2] * 4732) / Math.pow(2, 16)
+      const a = (item[0] * 14503 - item[1] * 22218 + item[2] * 7714) / Math.pow(2, 24) + 128
+      const b = (item[0] * 12773 + item[1] * 39695 - item[2] * 52468) / Math.pow(2, 24) + 128
+      if (x > this.width) {
+        x = 1
+        y++
       }
-    }
-    return lab
-  }
-
-  async init () {
-    const image = await Jimp.read(this.path)
-    this.image = image
-    this.width = image.bitmap.width
-    this.height = image.bitmap.height
-  }
-
-  getRGB () {
-    let red = []
-    let green = []
-    let blue = []
-
-    this.image.scan(0, 0, this.width, this.height, function (x, y, idx) {
-      red.push(this.bitmap.data[idx + 0])
-      green.push(this.bitmap.data[idx + 1])
-      blue.push(this.bitmap.data[idx + 2])
+      lab.push([L, a, b, x, y])
+      x++
     })
-
-    return [
-      red, green, blue
-    ]
+    return lab
   }
 }
