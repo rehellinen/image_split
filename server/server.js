@@ -33,12 +33,16 @@ class Server {
   }
 
   testSplit () {
-    const path = require('path')
-    let ctx = {req: {file: {path: ''}}}
-    ctx.req.file.path = path.resolve(__dirname, './upload/20181114/1542164942001.jpg')
-    ImageSplit()(ctx)
+    try{
+      const path = require('path')
+      let ctx = {req: {file: {path: ''}}}
+      ctx.req.file.path = path.resolve(__dirname, './upload/20181114/1542164942001.jpg')
+      ImageSplit()(ctx)
+    } catch (e) {
+      console.log(e)
+    }
   }
 }
 
-// (new Server()).start()
-(new Server()).testSplit()
+(new Server()).start()
+// (new Server()).testSplit()

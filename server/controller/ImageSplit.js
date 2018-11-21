@@ -21,11 +21,11 @@ export const upload = Multer({storage})
 export const ImageSplit = () => async (ctx, next) => {
   const path = ctx.req.file.path
   // 预处理
-  const image = await new PreProcess(path).get()
+  const border = await new PreProcess(path).get()
   // 返回信息
   ctx.type = 'application/json'
   ctx.body = {
     message: 'success',
-    data: JSON.stringify(image)
+    data: border
   }
 }

@@ -22,9 +22,8 @@ export class PreProcess {
     const lab = this.rgb2lab(rgb)
     // 调用superpixel进行分割
     const splitRes = new Superpixel(lab, this.width, this.height).split()
-    // LAB转RGB
-    const res = this.processRes(rgb, splitRes)
-    return res
+    // 生成边框信息
+    return this.getBorder(splitRes)
   }
 
   // 通过canvas获取图片的RGB
@@ -47,12 +46,18 @@ export class PreProcess {
     return rgb;
   }
 
-  processRes (rgb, splitRes) {
-    const res = []
-    splitRes.forEach((item, index) => {
-      rgb[index].push(item[6])
-    })
-    return rgb
+  getBorder (splitRes) {
+    try {
+      const border = []
+      for (let i = 1; i < splitRes.length - 1; i++) {
+        if (splitRes[i][6] !== splitRes[i - 1][6] && splitRes[i][6] !== splitRes[i + 1][6]) {
+          border.push([splitRes[i][3], splitRes[i][4]])
+        }
+      }
+      return border
+    }catch (e) {
+      console.log(e)
+    }
   }
 
   // RGB转LAB
