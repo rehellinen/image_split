@@ -5,6 +5,8 @@
     div.upload
       img.uploadImage(:src="imageUrl" v-if="imageUrl")
       input(type="file" @change="uploadImage")
+    div.canvas
+      canvas(id="canvas" ref="canvas" width="500" height="500")
 </template>
 
 <script>
@@ -13,6 +15,13 @@ import axios from 'axios'
 const requestUrl = '/api/image'
 
 export default {
+  async created () {
+    const {data} = await axios({
+      url: '/api/test',
+      method: 'get'
+    })
+    this.showBorder(data.data)
+  },
   data () {
     return {
       imageUrl: '',
@@ -29,18 +38,29 @@ export default {
       let formData = new FormData()
       formData.append('image', file, 'test.jpg')
 
-      const res = await axios({
+      const {data} = await axios({
         url: requestUrl,
         method: 'post',
         data: formData,
         headers: {'Content-Type': 'application/x-www-form-urlencoded'}
       })
-      console.log(res)
+      this.showBorder(data.data)
     },
     showImage (file) {
       const fr = new FileReader()
       fr.onloadend = (e) => this.imageUrl = e.target.result
       fr.readAsDataURL(file)
+    },
+    showBorder (data) {
+      const canvas = this.$refs.canvas
+      const ctx = canvas.getContext('2d')
+      ctx.fillStyle = '#0000ff'
+
+      data.border.forEach(item => {
+        let newX = Math.floor(500/data.width * item[0])
+        let newY = Math.floor(500/data.height * item[1])
+        ctx.fillRect(newX, newY, 1, 1)
+      })
     }
   }
 }
@@ -63,6 +83,6 @@ export default {
   .upload
     display: flex
     .uploadImage
-      width: 300px
-      height: 300px
+      width: 500px
+      height: 500px
 </style>

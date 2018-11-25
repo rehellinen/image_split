@@ -23,7 +23,13 @@ export class PreProcess {
     // 调用superpixel进行分割
     const splitRes = new Superpixel(lab, this.width, this.height).split()
     // 生成边框信息
-    return this.getBorder(splitRes)
+    const time2 = new Date().getTime()
+    console.log(time2 - time1)
+    return {
+      width: this.width,
+      height: this.height,
+      border: this.getBorder(splitRes)
+    }
   }
 
   // 通过canvas获取图片的RGB

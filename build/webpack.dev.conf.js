@@ -29,7 +29,8 @@ module.exports = merge(baseConfig, {
     proxy: {
       '/api': {
         target: 'http://localhost:9528',
-        pathRewrite: {"^/api" : ""}
+        pathRewrite: {"^/api" : ""},
+        proxyTimeout: 200000
       }
     }
   },

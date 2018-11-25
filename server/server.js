@@ -27,20 +27,10 @@ class Server {
     let router = new Router()
 
     router.post('/image', upload.single('image'), ImageSplit())
+    router.get('/test', ImageSplit())
 
     this.app.use(router.routes())
       .use(router.allowedMethods())
-  }
-
-  testSplit () {
-    try{
-      const path = require('path')
-      let ctx = {req: {file: {path: ''}}}
-      ctx.req.file.path = path.resolve(__dirname, './upload/20181114/1542164942001.jpg')
-      ImageSplit()(ctx)
-    } catch (e) {
-      console.log(e)
-    }
   }
 }
 
