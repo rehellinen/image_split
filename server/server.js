@@ -6,7 +6,7 @@
 import Koa from 'koa'
 import Router from 'koa-router'
 import chalk from 'chalk'
-import {ImageSplit, upload} from "./controller/ImageSplit"
+import {ImageSplit, upload, testVgg16} from "./controller/ImageSplit"
 
 class Server {
   constructor () {
@@ -27,7 +27,7 @@ class Server {
     let router = new Router()
 
     router.post('/image', upload.single('image'), ImageSplit())
-    router.get('/test', ImageSplit())
+    router.get('/test', testVgg16())
 
     this.app.use(router.routes())
       .use(router.allowedMethods())
@@ -35,4 +35,3 @@ class Server {
 }
 
 (new Server()).start()
-// (new Server()).testSplit()
