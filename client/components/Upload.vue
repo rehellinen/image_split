@@ -6,7 +6,7 @@
       img.uploadImage(:src="imageUrl" v-if="imageUrl")
       input(type="file" @change="uploadImage")
     div.canvas
-      canvas(id="canvas" ref="canvas" width="500" height="500")
+      canvas(id="canvas" ref="canvas" width="500" height="400")
 </template>
 
 <script>
@@ -60,6 +60,14 @@ export default {
         let newX = Math.floor(500/data.width * item[0])
         let newY = Math.floor(500/data.height * item[1])
         ctx.fillRect(newX, newY, 1, 1)
+      })
+
+      ctx.fillStyle = '#00ff00'
+      console.log(data.center)
+      data.center.forEach(item => {
+        let newX = Math.floor(500/data.width * item.x)
+        let newY = Math.floor(500/data.height * item.y)
+        ctx.fillRect(newX-3, newY-3, 6, 6)
       })
     }
   }

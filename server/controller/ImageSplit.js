@@ -19,8 +19,8 @@ const storage = Multer.diskStorage({
 export const upload = Multer({storage})
 
 export const ImageSplit = () => async (ctx, next) => {
-  const path = require('path').resolve(__dirname, '../upload/20181114/1542164942001.jpg')
-  // const path = ctx.req.file.path
+  // const path = require('path').resolve(__dirname, '../upload/20181125/dog.png')
+  const path = ctx.req.file.path
   // 预处理
   const info = await new PreProcess(path).get()
   // 返回信息

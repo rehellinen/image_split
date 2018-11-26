@@ -28,7 +28,8 @@ export class PreProcess {
     return {
       width: this.width,
       height: this.height,
-      border: this.getBorder(splitRes)
+      border: this.getBorder(splitRes.res),
+      center: splitRes.center
     }
   }
 
@@ -56,8 +57,21 @@ export class PreProcess {
     try {
       const border = []
       for (let i = 1; i < splitRes.length - 1; i++) {
-        if (splitRes[i][6] !== splitRes[i - 1][6] && splitRes[i][6] !== splitRes[i + 1][6]) {
+        if (splitRes[i][6] === -1) {
+          continue
+        }
+        if (splitRes[i][6] !== splitRes[i - 1][6]
+          && splitRes[i][6] === splitRes[i + 1][6]
+        ) {
           border.push([splitRes[i][3], splitRes[i][4]])
+        }
+
+        if (splitRes[i] > this.width) {
+          if (splitRes[i][6] !== splitRes[i - this.width][6]
+            && splitRes[i][6] === splitRes[i + this.width][6]
+          ) {
+            border.push([splitRes[i][3], splitRes[i][4]])
+          }
         }
       }
       return border
