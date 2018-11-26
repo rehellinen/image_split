@@ -6,6 +6,7 @@
 import Multer from 'koa-multer'
 import {resolve} from 'path'
 import {PreProcess} from "../libs/PreProcess"
+import {VGG16} from "../libs/VGG16"
 
 const data = new Date()
 const storage = Multer.diskStorage({
@@ -23,7 +24,11 @@ export const ImageSplit = () => async (ctx, next) => {
   const path = ctx.req.file.path
   // 预处理
   const info = await new PreProcess(path).get()
+  // 使用VGG16进行处理
+  new VGG16(info.pixels)
+
   // 返回信息
+  delete(info['pixels'])
   ctx.type = 'application/json'
   ctx.body = {
     message: 'success',

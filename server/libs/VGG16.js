@@ -6,8 +6,12 @@
 import * as tf from '@tensorflow/tfjs'
 
 export class VGG16 {
-  constructor (clusters) {
-    this.clusters = clusters
+  constructor (pixels) {
+    this.clusters = pixels
+  }
+
+  process () {
+
   }
 
   defineModel () {

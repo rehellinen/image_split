@@ -20,7 +20,7 @@ export class PreProcess {
     // RGB转LAB
     const lab = this.rgb2lab(rgb)
     // 调用superpixel进行分割
-    const splitRes = new Superpixel(lab, this.width, this.height).split()
+    const splitRes = new Superpixel(lab, this.width, this.height, 30).split()
     // 生成边框信息
     const time2 = new Date().getTime()
     console.log(time2 - time1)
@@ -28,7 +28,8 @@ export class PreProcess {
       width: this.width,
       height: this.height,
       border: this.getBorder(splitRes.res),
-      center: splitRes.center
+      center: splitRes.center,
+      pixels: splitRes.res
     }
   }
 

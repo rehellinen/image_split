@@ -8,51 +8,45 @@ const rooting = value => Math.pow(value, 1/2)
 
 
 export class Superpixel {
-  constructor (lab, width, height) {
+  constructor (lab, width, height, m = 30) {
     this.lab = lab
     this.width = width
     this.height = height
+    this.m = m
   }
 
   split () {
     // 生成初始种子
-    const seeds = this.generateSeeds()
+    let centers = this.generateSeeds()
     // 初始化信息
     this.generateInfo()
     // 迭代合并
     const res = {}
-    seeds.forEach((item, index) => {
+    for (let i = 0; i < 5; i++) {
+      this.generateCluster(centers)
+      centers = this.updateCenters()
+    }
+    // 合并孤立点
+    this.mergeIsolatedPoint()
+    return {
+      center: centers,
+      res: this.lab
+    }
+  }
+
+  generateCluster (centers) {
+    centers.forEach((item, index) => {
       const range = this.getRange(item)
-      const pixels = this.generateAround(range)
+      const pixels = this.getAroundPixels(range)
       const center = this.lab[item.x + item.y * this.width]
       pixels.forEach(i => {
         const similarity = this.compare(center, i)
         this.changeInfo(i, similarity, index)
       })
     })
-    let newCenters
-    // 更新质点位置
-    for (let i = 0; i < 5; i++) {
-      newCenters = this.updateCenters()
-      newCenters.forEach((item, index) => {
-        const range = this.getRange(item)
-        const pixels = this.generateAround(range)
-        const center = this.lab[item.x + item.y * this.width]
-        pixels.forEach(i => {
-          const similarity = this.compare(center, i)
-          this.changeInfo(i, similarity, index)
-        })
-      })
-    }
-
-    // 合并孤立点
-    this.mergeIsolatedPoint()
-    return {
-      center: newCenters,
-      res: this.lab
-    }
   }
 
+  // 更新中心点
   updateCenters () {
     const center = []
 
@@ -71,6 +65,7 @@ export class Superpixel {
     return center
   }
 
+  // 合并孤立点
   mergeIsolatedPoint () {
     const res = this.lab
     for (let i = 1; i < res.length - 1; i++) {
@@ -80,7 +75,8 @@ export class Superpixel {
     }
   }
 
-  generateAround (range) {
+  // 获取中心像素附近的像素
+  getAroundPixels (range) {
     let pixels = []
     for (let i = range.up; i <= range.down; i++) {
       let oneLine = this.lab.slice((i-1)*this.width + range.left, (i-1)*this.width + range.right)
@@ -89,6 +85,7 @@ export class Superpixel {
     return pixels
   }
 
+  // 生成超像素的矩形空间的四个角坐标
   getRange (pixel) {
     return {
       left: (pixel.x - this.side * 2) < 1 ? 1 : Math.round(pixel.x - this.side * 2),
@@ -98,6 +95,7 @@ export class Superpixel {
     }
   }
 
+  // 更改一个像素的信息
   changeInfo (pixel, similarity, category) {
     if (similarity < pixel[5]) {
       pixel[5] = similarity
@@ -105,6 +103,7 @@ export class Superpixel {
     }
   }
 
+  // 生成超像素需要的信息（距离、类别）
   generateInfo () {
     this.lab.forEach(item => {
       item.push(99999, -1)
@@ -113,7 +112,6 @@ export class Superpixel {
 
   // 判断两个像素的相似度
   compare (pixelOne, pixelTwo) {
-    const m = 40
     const S = rooting((this.width * this.height) / this.totalCount)
 
     const color = rooting(
@@ -127,7 +125,7 @@ export class Superpixel {
 
     return rooting(
       square(color) +
-      square(space / S * m))
+      square(space / S * this.m))
   }
 
   // 生成超像素的初始种子
