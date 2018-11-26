@@ -1,15 +1,19 @@
 <template lang="pug">
   div.container
-    div.title
-      p 上传图片
+    subtitle(title="上传照片")
     div.upload
       input(type="file" @change="uploadImage")
-    div.canvas
-      canvas(id="canvas" ref="canvas" width="500" height="400")
+      div.upload-button
+        p 点击上传
+      div.upload-status
+        p 状态：{{status}}
+    show(:imageUrl="imageUrl" :data="data" v-show="status === '已完成'")
 </template>
 
 <script>
 import axios from 'axios'
+import Subtitle from './Subtitle'
+import Show from './Show'
 
 const requestUrl = '/api/image'
 
@@ -17,61 +21,34 @@ export default {
   data () {
     return {
       imageUrl: '',
-      imageStyle: ''
+      status: '未上传',
+      data: []
     }
   },
   methods: {
     async uploadImage (event) {
+      this.status = '处理中'
       const file = event.target.files[0]
-
-      // 显示上传的图片
-      this.showImage(file)
-
+      // 获取上传图片的URL
+      const fr = new FileReader()
+      fr.onloadend = (e) => this.imageUrl = e.target.result
+      fr.readAsDataURL(file)
+      // 图片上传至服务器
       let formData = new FormData()
       formData.append('image', file, 'test.jpg')
-
       const {data} = await axios({
         url: requestUrl,
         method: 'post',
         data: formData,
         headers: {'Content-Type': 'application/x-www-form-urlencoded'}
       })
-      this.showBorder(data.data)
+      this.status = '已完成'
+      this.data = data.data
     },
-    showImage (file) {
-      const fr = new FileReader()
-      fr.onloadend = (e) => this.imageUrl = e.target.result
-      fr.readAsDataURL(file)
-    },
-    showBorder (data) {
-      const canvas = this.$refs.canvas
-      const ctx = canvas.getContext('2d')
-      // 清空canvas
-      ctx.clearRect(0, 0, 500, 400);
-
-      const img = new Image()
-      img.src = this.imageUrl
-      img.onload = function () {
-        // 载入原图
-        ctx.drawImage(this, 0, 0, 500, 400)
-        // 画边框
-        ctx.fillStyle = '#fff'
-        data.border.forEach(item => {
-          let newX = Math.floor(500/data.width * item[0])
-          let newY = Math.floor(400/data.height * item[1])
-          ctx.fillRect(newX, newY, 1, 1)
-        })
-        // 画像素块的中心
-        ctx.fillStyle = '#00ff00'
-        console.log(data.center)
-        data.center.forEach(item => {
-          let newX = Math.floor(500/data.width * item.x)
-          let newY = Math.floor(400/data.height * item.y)
-          ctx.fillRect(newX-2, newY-2, 4, 4)
-        })
-      }
-
-    }
+  },
+  components: {
+    Subtitle,
+    Show
   }
 }
 </script>
@@ -81,15 +58,29 @@ export default {
     display: flex
     flex-direction: column
     width: 100%
-  .title
-    background-color: #e0e0e0
-    height: 40px
+  .upload
+    position: relative
     display: flex
     align-items: center
-    p
-      margin-left: 7%
-      color: #9e9e9e
-      font-weight: bold
-  .upload
-    display: flex
+    margin: 10px 10px
+    height: 40px
+    input
+      position: absolute
+      left: 0
+      top: 0
+      opacity: 0
+      -ms-filter: 'alpha(opacity=0)'
+      height: 40px
+    .upload-button
+      border-radius: 5px
+      background-color: #738ffe
+      color: white
+      padding: 5px 0
+      font-size: 10px
+      width: 80px
+      text-align: center
+      letter-spacing: 1px
+      height: 15px
+    .upload-status
+      margin-left: 10%
 </style>

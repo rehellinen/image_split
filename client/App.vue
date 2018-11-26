@@ -2,19 +2,16 @@
   div.wrap
     top-title
     upload
-    show
 </template>
 
 <script>
 import Upload from './components/Upload'
 import TopTitle from './components/Title'
-import Show from './components/Show'
 
 export default {
   components: {
     Upload,
-    TopTitle,
-    Show
+    TopTitle
   }
 }
 </script>

@@ -3,7 +3,6 @@
  *  Create By rehellinen
  *  Create On 2018/11/13 11:04
  */
-import Jimp from 'jimp'
 import {Superpixel} from "./Superpixel"
 const {createCanvas, loadImage} = require('canvas')
 /**
@@ -54,30 +53,26 @@ export class PreProcess {
   }
 
   getBorder (splitRes) {
-    try {
-      const border = []
-      for (let i = 1; i < splitRes.length - 1; i++) {
-        if (splitRes[i][6] === -1) {
-          continue
-        }
-        if (splitRes[i][6] !== splitRes[i - 1][6]
-          && splitRes[i][6] === splitRes[i + 1][6]
+    const border = []
+    for (let i = 2; i < splitRes.length - 2; i++) {
+      if (splitRes[i][6] === -1) {
+        continue
+      }
+      if (splitRes[i][6] !== splitRes[i - 1][6]
+        && splitRes[i][6] === splitRes[i + 1][6]
+      ) {
+        border.push([splitRes[i][3], splitRes[i][4]])
+      }
+
+      if (i > this.width && i < splitRes.length - this.width) {
+        if (splitRes[i][6] !== splitRes[i - this.width][6]
+          && splitRes[i][6] === splitRes[i + this.width][6]
         ) {
           border.push([splitRes[i][3], splitRes[i][4]])
         }
-
-        if (splitRes[i] > this.width) {
-          if (splitRes[i][6] !== splitRes[i - this.width][6]
-            && splitRes[i][6] === splitRes[i + this.width][6]
-          ) {
-            border.push([splitRes[i][3], splitRes[i][4]])
-          }
-        }
       }
-      return border
-    }catch (e) {
-      console.log(e)
     }
+    return border
   }
 
   // RGB转LAB
