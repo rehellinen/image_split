@@ -22,7 +22,7 @@ export default {
     return {
       imageUrl: '',
       status: '未上传',
-      data: []
+      data: {}
     }
   },
   methods: {
@@ -78,9 +78,11 @@ export default {
       padding: 5px 0
       font-size: 10px
       width: 80px
-      text-align: center
       letter-spacing: 1px
       height: 15px
+      display: flex
+      justify-content: center
+      align-items: center
     .upload-status
       margin-left: 10%
 </style>
