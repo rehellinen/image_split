@@ -113,7 +113,7 @@ export class Superpixel {
 
   // 判断两个像素的相似度
   compare (pixelOne, pixelTwo) {
-    const m = 20
+    const m = 40
     const S = rooting((this.width * this.height) / this.totalCount)
 
     const color = rooting(

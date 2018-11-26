@@ -3,7 +3,6 @@
     div.title
       p 上传图片
     div.upload
-      img.uploadImage(:src="imageUrl" v-if="imageUrl")
       input(type="file" @change="uploadImage")
     div.canvas
       canvas(id="canvas" ref="canvas" width="500" height="400")
@@ -15,13 +14,6 @@ import axios from 'axios'
 const requestUrl = '/api/image'
 
 export default {
-  async created () {
-    const {data} = await axios({
-      url: '/api/test',
-      method: 'get'
-    })
-    this.showBorder(data.data)
-  },
   data () {
     return {
       imageUrl: '',
@@ -54,21 +46,31 @@ export default {
     showBorder (data) {
       const canvas = this.$refs.canvas
       const ctx = canvas.getContext('2d')
-      ctx.fillStyle = '#0000ff'
+      // 清空canvas
+      ctx.clearRect(0, 0, 500, 400);
 
-      data.border.forEach(item => {
-        let newX = Math.floor(500/data.width * item[0])
-        let newY = Math.floor(500/data.height * item[1])
-        ctx.fillRect(newX, newY, 1, 1)
-      })
+      const img = new Image()
+      img.src = this.imageUrl
+      img.onload = function () {
+        // 载入原图
+        ctx.drawImage(this, 0, 0, 500, 400)
+        // 画边框
+        ctx.fillStyle = '#fff'
+        data.border.forEach(item => {
+          let newX = Math.floor(500/data.width * item[0])
+          let newY = Math.floor(400/data.height * item[1])
+          ctx.fillRect(newX, newY, 1, 1)
+        })
+        // 画像素块的中心
+        ctx.fillStyle = '#00ff00'
+        console.log(data.center)
+        data.center.forEach(item => {
+          let newX = Math.floor(500/data.width * item.x)
+          let newY = Math.floor(400/data.height * item.y)
+          ctx.fillRect(newX-2, newY-2, 4, 4)
+        })
+      }
 
-      ctx.fillStyle = '#00ff00'
-      console.log(data.center)
-      data.center.forEach(item => {
-        let newX = Math.floor(500/data.width * item.x)
-        let newY = Math.floor(500/data.height * item.y)
-        ctx.fillRect(newX-3, newY-3, 6, 6)
-      })
     }
   }
 }
@@ -90,7 +92,4 @@ export default {
       font-weight: bold
   .upload
     display: flex
-    .uploadImage
-      width: 500px
-      height: 500px
 </style>
