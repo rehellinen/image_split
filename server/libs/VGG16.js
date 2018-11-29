@@ -16,28 +16,45 @@ export class VGG16 {
   }
 
   async process () {
+    const time1 = (new Date().getTime())
     const data = this.processData()
     this.defineModel()
+    this.addOptimizer()
     const res = await this.train(data)
+    const time2 = (new Date().getTime())
+    console.log(time2 - time1)
     return res
   }
 
+  predict () {
+    const data = this.processData()
+    data.forEach(item => {})
+  }
+
   async train (data) {
-    // const res = await this.model.save(r('../model/'))
-    console.log(tf.tensor4d(data))
-    this.model.predict(tf.tensor4d(data))
+    const output = this.model.predict(tf.tensor4d([data]))
+    const prediction = Array.from(output.argMax(1).dataSync())
+    console.log(prediction)
+    return prediction
+  }
+
+  addOptimizer () {
+    const LEARNING_RATE = 0.15
+    const optimizer = tf.train.sgd(LEARNING_RATE)
+    this.model.compile({
+      optimizer: optimizer,
+      loss: 'categoricalCrossentropy',
+      metrics: ['accuracy'],
+    })
   }
 
   processData () {
     let newData = []
-    let yIndex = 0
-    for (let i = 0; i < this.pixels.length; i++) {
-      if (i % this.width === 0 && i >= this.width) {
-        yIndex++
-      }
-      if (!Array.isArray(newData[yIndex])) newData[yIndex] = []
-      newData[yIndex].push(this.pixels[i])
-    }
+    this.pixels.forEach(item => {
+      if (item[6] === -1) return
+      if (!Array.isArray(newData[item[6]])) newData[item[6]] = []
+      newData[item[6]].push(item)
+    })
     return newData
   }
 
@@ -45,7 +62,8 @@ export class VGG16 {
     this.model = tf.sequential()
     // 1
     this.addConvolution(3, 64, {
-      inputShape: [this.width, this.height, 3]
+      inputShape: [this.height, this.width, 3],
+      data_format: 'channels_last'
     })
     this.addConvolution(3, 64)
     this.addPooling(2, 2)

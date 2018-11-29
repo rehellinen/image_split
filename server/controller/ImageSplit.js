@@ -25,7 +25,7 @@ export const ImageSplit = () => async (ctx, next) => {
   // 预处理
   const info = await new PreProcess(path).get()
   // 使用VGG16进行处理
-  new VGG16(info.pixels)
+  new VGG16(info.pixels).predict()
 
   // 返回信息
   delete(info['pixels'])
@@ -38,9 +38,9 @@ export const ImageSplit = () => async (ctx, next) => {
 
 export const testVgg16 = () => async (ctx, next) => {
   const path = r('../upload/20181126/1543229625250.jpg')
-  let image = new PreProcess(path)
-  const rgb = await image.getRgb()
-  const data = new VGG16(rgb, image.width, image.height).process()
+  let pre = new PreProcess(path)
+  const info = await pre.get()
+  const data = new VGG16(info.pixels, pre.width, pre.height).predict()
 
   ctx.type = 'application/json'
   ctx.body = {
