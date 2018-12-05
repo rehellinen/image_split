@@ -8,7 +8,7 @@ const rooting = value => Math.pow(value, 1/2)
 
 
 export class Superpixel {
-  constructor (lab, width, height, m = 30) {
+  constructor (lab, width, height, m = 50) {
     this.lab = lab
     this.width = width
     this.height = height
@@ -141,5 +141,10 @@ export class Superpixel {
     }
 
     return pixels
+  }
+
+  // 计算梯度优化中心
+  findBetterCenter (center) {
+
   }
 }

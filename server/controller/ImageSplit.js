@@ -11,7 +11,7 @@ import {VGG16} from "../libs/VGG16"
 const r = (path) => resolve(__dirname, path)
 const data = new Date()
 const storage = Multer.diskStorage({
-  destination: r(`../upload/${data.getFullYear()}${data.getMonth() + 1}${data.getDate()}`),
+  destination: r(`../../upload/${data.getFullYear()}${data.getMonth() + 1}${data.getDate()}`),
   filename (ctx, file, cb) {
     const filenameArr = file.originalname.split('.');
     cb(null, Date.now() + '.' + filenameArr[filenameArr.length-1]);
