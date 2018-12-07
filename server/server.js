@@ -27,7 +27,7 @@ class Server {
     let router = new Router()
 
     router.post('/image', upload.single('image'), ImageSplit())
-    router.get('/test', testVgg16())
+    router.get('/test1', testVgg16())
 
     this.app.use(router.routes())
       .use(router.allowedMethods())

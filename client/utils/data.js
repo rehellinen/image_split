@@ -104,11 +104,11 @@ export class MnistData {
     }
 
     /**
-     * Get all test data as a data tensor a a labels tensor.
+     * Get all test1 data as a data tensor a a labels tensor.
      *
      * @param {number} numExamples Optional number of examples to get. If not
      *     provided,
-     *   all test examples will be returned.
+     *   all test1 examples will be returned.
      * @returns
      *   xs: The data tensor, of shape `[numTestExamples, 28, 28, 1]`.
      *   labels: The one-hot encoded labels tensor, of shape

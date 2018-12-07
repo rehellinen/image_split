@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "webpack-dev-server --progress --config build/webpack.dev.conf.js",
     "server": "nodemon --watch server ./server/index.js",
+    "py": "python ./server/python/index.py",
     "build": "rimraf dist && cross-env NODE_ENV=production webpack --config build/webpack.base.conf.js --progress --hide-modules"
   },
   "repository": {
