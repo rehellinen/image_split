@@ -4,14 +4,12 @@ import numpy as np
 
 
 class Data:
-    def __init__(self, paths, need_shuffle = False):
+    def __init__(self, paths, need_shuffle=False):
         self.paths = paths
         self.need_shuffle = need_shuffle
 
         # load all data according to the paths
-        all_data, all_labels = self.load()
-        self.data = np.vstack(all_data)
-        self.labels = np.hstack(all_labels)
+        self.load()
         self.count = self.data.shape[0]
         self.indicator = 0
 
@@ -37,7 +35,9 @@ class Data:
                     if label in [0, 1]:
                         all_data.append(item)
                         all_labels.append(label)
-        return all_data, all_labels
+
+        self.data = np.vstack(all_data)
+        self.labels = np.hstack(all_labels)
 
     def shuffle(self):
         """
@@ -51,6 +51,8 @@ class Data:
 
     def next_batch(self, batch_size):
         end_indicator = self.indicator + batch_size
+        if batch_size > self.count:
+            raise Exception('batch size is larger than all examples')
         if end_indicator > self.count:
             if self.need_shuffle:
                 self.shuffle()
@@ -58,9 +60,6 @@ class Data:
                 end_indicator = batch_size
             else:
                 raise Exception('have no more examples')
-
-        if end_indicator > self.count:
-            raise Exception('batch size is larger than all examples')
 
         batch_data = self.data[self.indicator: end_indicator]
         batch_labels = self.labels[self.indicator: end_indicator]
