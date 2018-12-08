@@ -12,12 +12,12 @@ class Data:
         self.load()
         self.count = self.data.shape[0]
         self.indicator = 0
+        self.shuffle()
 
     def get(self):
         """
         main method (return the processed data)
         """
-        self.shuffle()
         return self.data
 
     def load(self):
