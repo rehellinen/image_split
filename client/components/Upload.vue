@@ -12,10 +12,10 @@
     show(:imageUrl="imageUrl" :data="data" v-show="status === '已完成'")
     div.checkbox
       div.con
-        div
+        div(@click="changeColor('front')")
           div.check
           p 前景
-        div
+        div(@click="changeColor('back')")
           div.no-check
           p 背景
 </template>
@@ -34,7 +34,8 @@ export default {
       status: '未上传',
       canvasWidth: 300,
       canvasHeight: 300,
-      data: {}
+      data: {},
+      color: 'aqua'
     }
   },
   methods: {
@@ -56,12 +57,22 @@ export default {
       const ctx = canvas.getContext('2d')
       // 清空canvas
       ctx.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
-
+      // 载入原图
       const img = new Image()
       img.src = this.imageUrl
       img.onload = function () {
-        // 载入原图
         ctx.drawImage(this, 0, 0, that.canvasWidth, that.canvasHeight)
+      }
+      // 标记功能
+      canvas.onmousedown = function (e) {
+        canvas.onmousemove = function(event) {
+          ctx.fillStyle = that.color
+          ctx.fillRect(event.offsetX-2, event.offsetY-2, 4, 4)
+        }
+        canvas.onmouseup = () => {
+          canvas.onmousemove = null
+          canvas.onmouseup = null
+        }
       }
     },
     async uploadImage (image) {
@@ -75,6 +86,9 @@ export default {
       })
       this.status = '已完成'
       this.data = data.data
+    },
+    changeColor (type) {
+      this.color = type === 'front' ? 'aqua' : 'blanchedalmond'
     }
   },
   components: {
