@@ -22,7 +22,7 @@ export class Superpixel {
     this.generateInfo()
     // 迭代合并
     const res = {}
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < 3; i++) {
       this.generateCluster(centers)
       centers = this.updateCenters()
     }
@@ -114,18 +114,15 @@ export class Superpixel {
   compare (pixelOne, pixelTwo) {
     const S = rooting((this.width * this.height) / this.totalCount)
 
-    const color = rooting(
-      square(pixelOne[0] - pixelTwo[0]) +
+    const color = square(pixelOne[0] - pixelTwo[0]) +
       square(pixelOne[1] - pixelTwo[1]) +
-      square(pixelOne[2] - pixelTwo[2]))
+      square(pixelOne[2] - pixelTwo[2])
 
-    const space = rooting(
-      square(pixelOne[3] - pixelTwo[3]) +
-      square(pixelOne[4] - pixelTwo[4]))
+    const space = square(pixelOne[3] - pixelTwo[3]) +
+      square(pixelOne[4] - pixelTwo[4])
 
     return rooting(
-      square(color) +
-      square(space / S * this.m))
+      color + space * square(this.m / S))
   }
 
   // 生成超像素的初始种子
@@ -141,10 +138,5 @@ export class Superpixel {
     }
 
     return pixels
-  }
-
-  // 计算梯度优化中心
-  findBetterCenter (center) {
-
   }
 }

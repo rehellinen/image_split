@@ -21,9 +21,8 @@ export class PreProcess {
     const lab = this.rgb2lab(rgb)
     // 调用superpixel进行分割
     const splitRes = new Superpixel(lab, this.width, this.height, 30).split()
-    // 生成边框信息
     const time2 = new Date().getTime()
-    console.log(time2 - time1)
+    console.log(`总耗时：${time2 - time1}ms`)
     return {
       width: this.width,
       height: this.height,
