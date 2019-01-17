@@ -8,6 +8,15 @@
       div.upload-status
         p 状态：{{status}}
     show(:imageUrl="imageUrl" :data="data" v-show="status === '已完成'")
+    <!--img(:src="imageUrl" style="width: 300px; height: 350px; margin-left: 37.5px; margin-top: 30px")-->
+    <!--div.checkbox-->
+      <!--div.con-->
+        <!--div-->
+          <!--div.check-->
+          <!--p 前景-->
+        <!--div-->
+          <!--div.no-check-->
+          <!--p 背景-->
 </template>
 
 <script>
@@ -54,6 +63,27 @@ export default {
 </script>
 
 <style scoped lang="sass" rel="stylesheet/sass">
+  .checkbox
+    display: flex
+    justify-content: center
+    width: 100%
+    margin-top: 50px
+    .con
+      width: 50%
+      display: flex
+      justify-content: space-between
+      div
+        display: flex
+        p
+          margin-left: 10px
+      .check
+        width: 20px
+        height: 20px
+        background-color: aqua
+      .no-check
+        width: 20px
+        height: 20px
+        background-color: blanchedalmond
   .container
     display: flex
     flex-direction: column

@@ -78,21 +78,47 @@ export class PreProcess {
 
   // RGB转LAB
   rgb2lab (rgb) {
-    let lab = []
+    let labArr = []
     let x = 1
     let y = 1
 
+    const rgb2xyx = (r, g, b) => {
+      const gamma = (val) => {
+        val /= 255
+        return val>0.0404 ? Math.pow((val+0.055)/1.055, 2.4) : val/12.92
+      }
+
+      const x = 0.4124 * gamma(r) + 0.3576 * gamma(g) + 0.1805 * gamma(b)
+      const y = 0.2126 * gamma(r) + 0.7152 * gamma(g) + 0.0722 * gamma(b)
+      const z = 0.0193 * gamma(r) + 0.1192 * gamma(g) + 0.9505 * gamma(b)
+      return [x, y, z]
+    }
+
+    const xyz2lab = (x, y, z) => {
+      const Xn = 0.9504
+      const Yn = 1
+      const Zn = 1.0888
+      const f = val => {
+        return val > 0.008856 ? Math.pow(val, 1/3) : (7.787 * val + 0.1379)
+      }
+
+      const L = 116 * f(y/Yn) - 16
+      const a = 500 * (f(x/Xn) - f(y/Yn))
+      const b = 200 * (f(y/Yn) - f(z/Zn))
+
+      return [L, a, b]
+    }
+
     rgb.forEach(item => {
-      const L = (item[0] * 13933 + item[1] * 46871 + item[2] * 4732) / Math.pow(2, 16)
-      const a = (item[0] * 14503 - item[1] * 22218 + item[2] * 7714) / Math.pow(2, 24) + 128
-      const b = (item[0] * 12773 + item[1] * 39695 - item[2] * 52468) / Math.pow(2, 24) + 128
+      const xyz = rgb2xyx(item[0], item[1], item[2])
+      const lab = xyz2lab(xyz[0], xyz[1], xyz[2])
       if (x > this.width) {
         x = 1
         y++
       }
-      lab.push([L, a, b, x, y])
+      labArr.push([lab[0], lab[1], lab[2], x, y])
       x++
     })
-    return lab
+    return labArr
   }
 }

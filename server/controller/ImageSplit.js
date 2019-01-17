@@ -25,10 +25,10 @@ export const ImageSplit = () => async (ctx, next) => {
   // 预处理
   const info = await new PreProcess(path).get()
   // 使用VGG16进行处理
-  new VGG16(info.pixels).predict()
+  // new VGG16(info.pixels).predict()
 
   // 返回信息
-  delete(info['pixels'])
+  // delete(info['pixels'])
   ctx.type = 'application/json'
   ctx.body = {
     message: 'success',
