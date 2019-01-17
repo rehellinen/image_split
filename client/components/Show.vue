@@ -1,6 +1,5 @@
 <template lang="pug">
   div.container
-    subtitle(title="分割结果")
     div.canvas
       canvas(id="canvas" ref="canvas" :width="canvasWidth" :height="canvasHeight")
 </template>
@@ -21,8 +20,8 @@ export default {
   },
   data () {
     return {
-      canvasWidth: 500,
-      canvasHeight: 400
+      canvasWidth: 300,
+      canvasHeight: 300
     }
   },
   watch: {
@@ -85,6 +84,4 @@ export default {
       width: 100%
       display: flex
       justify-content: center
-    canvas
-      margin-top: 10px
 </style>

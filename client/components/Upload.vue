@@ -1,16 +1,17 @@
 <template lang="pug">
   div.container
-    subtitle(title="上传照片")
+    subtitle(:title="status")
+    // 点击上传
     div.upload
       input(type="file" @change="processImage")
       div.upload-button
         p 点击上传
-      div.upload-status
-        p 状态：{{status}}
-    div.canvas-container
+    // 图片展示
+    div.canvas-container(v-show="imageUrl")
       canvas(id="upload" ref="upload" :width="300" :height="300")
-    show(:imageUrl="imageUrl" :data="data" v-show="status === '已完成'")
-    div.checkbox
+      show(:imageUrl="imageUrl" :data="data" v-show="status === '已完成'")
+    // 选择框
+    div.checkbox(v-show="status === '等待标记'")
       div.con
         div(@click="changeColor('front')")
           div.check
@@ -18,6 +19,11 @@
         div(@click="changeColor('back')")
           div.no-check
           p 背景
+
+    // 提交
+    div.upload(v-show="status === '等待标记'")
+      div.upload-button(@click="uploadImage")
+        p 提交
 </template>
 
 <script>
@@ -31,7 +37,7 @@ export default {
   data () {
     return {
       imageUrl: '',
-      status: '未上传',
+      status: '等待上传',
       canvasWidth: 300,
       canvasHeight: 300,
       data: {},
@@ -40,11 +46,11 @@ export default {
   },
   methods: {
     async processImage (event) {
-      this.status = '处理中'
-      const image = event.target.files[0]
+      this.status = '等待标记'
+      this.image = event.target.files[0]
       // 获取上传图片的URL
       const fr = new FileReader()
-      fr.readAsDataURL(image)
+      fr.readAsDataURL(this.image)
       fr.onloadend = (e) => {
         this.imageUrl = e.target.result
         // canvas展示图片
@@ -75,9 +81,10 @@ export default {
         }
       }
     },
-    async uploadImage (image) {
+    async uploadImage () {
+      this.status = '服务器处理中'
       let formData = new FormData()
-      formData.append('image', image, 'test.jpg')
+      formData.append('image', this.image, 'test.jpg')
       const {data} = await axios({
         url: requestUrl,
         method: 'post',
@@ -104,6 +111,7 @@ export default {
     justify-content: center
     width: 100%
     margin-top: 15px
+    margin-bottom: 15px
     .con
       width: 50%
       display: flex
@@ -126,7 +134,8 @@ export default {
     width: 100%
   .canvas-container
     display: flex
-    justify-content: center
+    justify-content: space-around
+    align-items: center
   .upload
     position: relative
     display: flex
@@ -152,6 +161,4 @@ export default {
       display: flex
       justify-content: center
       align-items: center
-    .upload-status
-      margin-left: 10%
 </style>
