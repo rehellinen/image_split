@@ -30,8 +30,9 @@
 import axios from 'axios'
 import Subtitle from './Subtitle'
 import Show from './Show'
+import {Http} from "../utils/Http"
 
-const requestUrl = '/api/image'
+const http = new Http()
 
 export default {
   data () {
@@ -82,17 +83,9 @@ export default {
       }
     },
     async uploadImage () {
-      this.status = '服务器处理中'
-      let formData = new FormData()
-      formData.append('image', this.image, 'test.jpg')
-      const {data} = await axios({
-        url: requestUrl,
-        method: 'post',
-        data: formData,
-        headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-      })
+      this.status = '处理中'
+      this.data = await http.submitImage(this.image)
       this.status = '已完成'
-      this.data = data.data
     },
     changeColor (type) {
       this.color = type === 'front' ? 'aqua' : 'blanchedalmond'
