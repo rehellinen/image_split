@@ -1,6 +1,7 @@
 <template lang="pug">
   div.container
-    subtitle(:title="status")
+    div.subtitle
+      p 状态：{{status}}
     // 点击上传
     div.upload
       input(type="file" @change="processImage")
@@ -27,9 +28,7 @@
 </template>
 
 <script>
-import axios from 'axios'
-import Subtitle from './Subtitle'
-import Show from './Show'
+import Show from './show/Show'
 import {Http} from "../utils/Http"
 
 const http = new Http()
@@ -92,13 +91,29 @@ export default {
     }
   },
   components: {
-    Subtitle,
     Show
   }
 }
 </script>
 
 <style scoped lang="sass" rel="stylesheet/sass">
+  @import "~sass/base"
+
+  /** subtitle **/
+  .subtitle
+    background-color: $main-bg-color
+    height: 45px
+    display: flex
+    align-items: center
+    justify-content: center
+    width: 170px
+    border-radius: 5px
+    margin: 10px 0
+    p
+      font-weight: bold
+      font-size: $normal-font-size
+  /** subtitle **/
+
   .checkbox
     display: flex
     justify-content: center

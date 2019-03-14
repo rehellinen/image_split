@@ -1,7 +1,8 @@
 <template lang="pug">
   div.wrap
     my-header
-    upload
+    .main
+      upload
 </template>
 
 <script>
@@ -23,11 +24,12 @@ export default {
   .wrap
     display: flex
     flex-direction: column
-    align-items: center
     width: 100%
     min-height: 100vh
     padding-bottom: 10px
     color: $normal-font-color
     font-size: $normal-font-size
     background-color: $background-color
+    .main
+      padding: 10px 10%
 </style>

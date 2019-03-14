@@ -48,6 +48,8 @@
     display: flex
     flex-direction: column
     width: 100%
+    background-color: white
+    padding-bottom: 5px
     .header
       display: flex
       align-items: center

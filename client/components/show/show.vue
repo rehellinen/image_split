@@ -5,7 +5,6 @@
 </template>
 
 <script>
-import Subtitle from './Subtitle'
 
 export default {
   props: {
@@ -68,9 +67,6 @@ export default {
         this.ctx.fillRect(newX-2, newY-2, 4, 4)
       })
     }
-  },
-  components: {
-    Subtitle
   }
 }
 </script>
