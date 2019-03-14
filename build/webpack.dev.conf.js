@@ -28,7 +28,7 @@ module.exports = merge(baseConfig, {
     open: config.dev.autoOpenBrowser,
     proxy: {
       '/api': {
-        target: 'http://localhost:9528',
+        target: 'http://localhost:8081',
         pathRewrite: {"^/api" : ""},
         proxyTimeout: 200000
       }

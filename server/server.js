@@ -12,7 +12,7 @@ class Server {
   constructor () {
     this.app = new Koa()
     this.host = process.env.HOST || '127.0.0.1'
-    this.port = process.env.PORT || 9528
+    this.port = process.env.PORT || 8081
   }
 
   start () {

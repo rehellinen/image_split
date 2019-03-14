@@ -1,31 +1,33 @@
 <template lang="pug">
   div.wrap
-    top-title
+    my-header
     upload
 </template>
 
 <script>
 import Upload from './components/Upload'
-import TopTitle from './components/Title'
+import MyHeader from './components/header/header'
 
 export default {
   components: {
-    Upload,
-    TopTitle
+    MyHeader,
+    Upload
   }
 }
 </script>
 
-<style>
-  @import "./assets/css/reset.css";
-  .wrap{
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    color: dimgray;
-    background-color: #f5f5f5;
-    min-height: 100vh;
-    padding-bottom: 10px;
-  }
+<style lang="sass" rel="stylesheet/sass">
+  @import "~sass/reset"
+  @import "~sass/base"
+
+  .wrap
+    display: flex
+    flex-direction: column
+    align-items: center
+    width: 100%
+    min-height: 100vh
+    padding-bottom: 10px
+    color: $normal-font-color
+    font-size: $normal-font-size
+    background-color: $background-color
 </style>
