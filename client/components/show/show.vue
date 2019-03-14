@@ -74,10 +74,8 @@ export default {
 <style scoped lang="sass" rel="stylesheet/sass">
   .container
     display: flex
-    flex-direction: column
-    width: 100%
+    justify-content: flex-end
     .canvas
-      width: 100%
       display: flex
-      justify-content: center
+      justify-content: flex-end
 </style>

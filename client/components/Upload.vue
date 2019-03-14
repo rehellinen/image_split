@@ -1,16 +1,20 @@
 <template lang="pug">
   div.container
-    div.subtitle
+    // 状态栏
+    div.status
       p 状态：{{status}}
+
     // 点击上传
     div.upload
       input(type="file" @change="processImage")
       div.upload-button
         p 点击上传
+
     // 图片展示
     div.canvas-container(v-show="imageUrl")
       canvas(id="upload" ref="upload" :width="300" :height="300")
       show(:imageUrl="imageUrl" :data="data" v-show="status === '已完成'")
+
     // 选择框
     div.checkbox(v-show="status === '等待标记'")
       div.con
@@ -98,9 +102,13 @@ export default {
 
 <style scoped lang="sass" rel="stylesheet/sass">
   @import "~sass/base"
+  .container
+    display: flex
+    flex-direction: column
+    width: 100%
 
-  /** subtitle **/
-  .subtitle
+  /** status **/
+  .status
     background-color: $main-bg-color
     height: 45px
     display: flex
@@ -112,14 +120,49 @@ export default {
     p
       font-weight: bold
       font-size: $normal-font-size
-  /** subtitle **/
+  /** status **/
 
+  /** upload button **/
+  .upload
+    position: relative
+    display: flex
+    align-items: center
+    height: 40px
+    input
+      position: absolute
+      left: 0
+      top: 0
+      opacity: 0
+      -ms-filter: 'alpha(opacity=0)'
+      height: 40px
+    .upload-button
+      display: flex
+      justify-content: center
+      align-items: center
+      font-size: $small-font-size
+      color: white
+      border-radius: 5px
+      background-color: $theme-color
+      padding: 10px 0
+      width: 100px
+      letter-spacing: 1px
+      height: 15px
+  /** upload button **/
+
+  /** show photo **/
+  .canvas-container
+    display: flex
+    justify-content: space-between
+    align-items: center
+    padding: 40px 0
+  /** show photo **/
+
+  /** checkbox **/
   .checkbox
     display: flex
     justify-content: center
     width: 100%
-    margin-top: 15px
-    margin-bottom: 15px
+    margin-bottom: 40px
     .con
       width: 50%
       display: flex
@@ -136,37 +179,5 @@ export default {
         width: 20px
         height: 20px
         background-color: blanchedalmond
-  .container
-    display: flex
-    flex-direction: column
-    width: 100%
-  .canvas-container
-    display: flex
-    justify-content: space-around
-    align-items: center
-  .upload
-    position: relative
-    display: flex
-    align-items: center
-    margin: 10px 10px
-    height: 40px
-    input
-      position: absolute
-      left: 0
-      top: 0
-      opacity: 0
-      -ms-filter: 'alpha(opacity=0)'
-      height: 40px
-    .upload-button
-      border-radius: 5px
-      background-color: #738ffe
-      color: white
-      padding: 5px 0
-      font-size: 10px
-      width: 80px
-      letter-spacing: 1px
-      height: 15px
-      display: flex
-      justify-content: center
-      align-items: center
+  /** checkbox **/
 </style>
