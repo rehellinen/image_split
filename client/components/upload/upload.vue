@@ -32,8 +32,8 @@
 </template>
 
 <script>
-import Show from './show/Show'
-import {Http} from "../utils/Http"
+import Show from '../show/show'
+import {Http} from "../../utils/Http"
 
 const http = new Http()
 
@@ -154,14 +154,14 @@ export default {
     display: flex
     justify-content: space-between
     align-items: center
-    padding: 40px 0
+    padding: 40px 0 25px 0
   /** show photo **/
 
   /** checkbox **/
   .checkbox
     display: flex
     justify-content: center
-    width: 100%
+    width: 300px
     margin-bottom: 40px
     .con
       width: 50%

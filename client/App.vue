@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import Upload from './components/Upload'
+import Upload from './components/upload/Upload'
 import MyHeader from './components/header/header'
 
 export default {
